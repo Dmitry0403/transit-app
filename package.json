@@ -1,0 +1,32 @@
+{
+    "name": "transit-app",
+    "version": "1.0.0",
+    "description": "app for airport transit",
+    "private": true,
+    "scripts": {
+        "start": "webpack server",
+        "build": "webpack",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "css-loader": "^6.7.1",
+        "eslint-config-prettier": "^8.5.0",
+        "html-webpack-plugin": "^5.5.0",
+        "husky": "^8.0.1",
+        "lint-staged": "^12.4.1",
+        "prettier": "2.6.2",
+        "sass": "^1.52.1",
+        "sass-loader": "^13.0.0",
+        "style-loader": "^3.3.1",
+        "ts-loader": "^9.3.0",
+        "webpack": "^5.72.1",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.9.0"
+    }
+}
