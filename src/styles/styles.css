@@ -1,0 +1,17 @@
+@import url("./fonts.css");
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: "GoogleSans", Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+}
