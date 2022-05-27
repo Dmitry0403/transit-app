@@ -1,0 +1,47 @@
+@import "../../styles/palette.scss";
+
+.mainHomePage {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-height: 100%;
+}
+
+.mainTitle {
+    font-size: 35px;
+    span {
+        font-size: 50px;
+        font-weight: 600;
+    }
+}
+
+.sectionButton {
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.buttonTitle {
+    margin-bottom: 10px;
+}
+
+%game-shared {
+    display: flex;
+    border: solid 1px black;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgb(158, 157, 157);
+    background-color: rgb(253, 251, 251);
+    color: black;
+    &:hover {
+        box-shadow: 0 0 10px rgb(128, 128, 128);
+    }
+}
+
+.button {
+    @extend %game-shared;
+    display: inline-block;
+    font-size: 20px;
+    padding: 5px 15px 5px 15px;
+    &:hover {
+        cursor: pointer;
+    }
+}
