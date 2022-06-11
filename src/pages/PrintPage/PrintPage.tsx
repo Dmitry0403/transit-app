@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import scss from "./styles.module.scss";
+import { Content } from "../../components/Content";
 
 export const PrintPage: React.FC = () => {
     const navigate = useNavigate();
@@ -20,7 +21,25 @@ export const PrintPage: React.FC = () => {
                     <span>“АЭРОСТАР”</span>
                 </div>
             </div>
-            <p>Заявка на оформление</p>
+            <div className={scss.container}>
+                <Content />
+            </div>
+            <div className={scss.footer}>
+                <span>
+                    Республика Беларусь, 222201, Минская обл., г. Смолевичи, ул.
+                    Советская, 68-24
+                </span>
+                <span>
+                    Грузовой отдел: тел.(017)279-14-19, 279-12-93, факс:
+                    279-14-19
+                </span>
+                <span>
+                    Таможенный отдел: тел.(017)279-21-56, 279-22-56, факс:
+                    279-20-56
+                </span>
+                <span>УНН 600299506, ОКПО 06084802</span>
+                <span>www.aerostar.by e-mail: aerostar@aerostar.by</span>
+            </div>
         </div>
     );
 };

@@ -29,6 +29,8 @@
 // }
 
 .wrapperPrintPage {
+    display: flex;
+    flex-direction: column;
     height: 297mm;
     width: 210mm;
 }
@@ -56,4 +58,40 @@
     font-size: 16px;
     font-weight: 600;
     border-bottom: 3px solid black;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 3px solid black;
+    font-weight: 600;
+}
+
+@media print {
+    .wrapperPrintPage {
+        padding-top: 100px;
+    }
+    .header {
+        position: fixed;
+        top: 0px;
+        left: 100px;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0px;
+        left: 70px;
+    }
+    p {
+        page-break-inside: avoid;
+    }
+
+    @page {
+        margin: 20px auto;
+    }
 }

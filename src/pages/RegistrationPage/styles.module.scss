@@ -1,0 +1,16 @@
+.registrationForm {
+    display: flex;
+    justify-content: space-between;
+}
+
+.itemForm {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.errorMessage {
+    position: absolute;
+    bottom: -23px;
+    left: 0;
+    color: red;
+}

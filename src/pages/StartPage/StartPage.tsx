@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
 export const StartPage: React.FC = () => {
     return (
         <div>
-            <p>Привет</p>
-            <Link to={LINKS.print}>
-                <Button>распечатать</Button>
+            <p>создать новую заявку</p>
+            <Link to={LINKS.input}>
+                <Button size="large" type="dashed">
+                    Let's go
+                </Button>
             </Link>
         </div>
     );
