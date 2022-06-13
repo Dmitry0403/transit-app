@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { Button, Input } from "antd";
 import { nanoid } from "nanoid";
 import { Link } from "react-router-dom";
 import { getCustomsByCode } from "../../common/helper";
+import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
 
 interface IItemForm {
     [key: string]: string;
 }
 
-interface IItemsList {
-    [idItemOrder: string]: IItemForm;
+interface IOrder {
+    orderNumber: string;
+    list: {
+        [idItemOrder: string]: IItemForm;
+    };
 }
 
 export const RegistrationPage: React.FC = () => {
@@ -21,6 +25,7 @@ export const RegistrationPage: React.FC = () => {
         "количество мест:",
         "вес брутто:",
         "код таможни:",
+        "доп.информация:",
     ];
 
     const getInitialForm = (): IItemForm => {
@@ -33,10 +38,19 @@ export const RegistrationPage: React.FC = () => {
         );
     };
 
+    const getInitialOrderList = () => {
+        if (localStorage.getItem("currentOrder")) {
+            return JSON.parse(localStorage.getItem("currentOrder") as string);
+        } else return { orderNumber: "", list: {} };
+    };
+
     const [itemForm, setItemForm] = useState<IItemForm>(getInitialForm());
     const [errorForm, setErrorForm] = useState<IItemForm>(getInitialForm());
+    const [orderList, setOrderList] = useState<IOrder>(getInitialOrderList());
 
-    const [itemsList, setItemsList] = useState<IItemsList>({});
+    useEffect(() => {
+        localStorage.setItem("currentOrder", JSON.stringify(orderList));
+    }, [orderList]);
 
     const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.name;
@@ -53,10 +67,20 @@ export const RegistrationPage: React.FC = () => {
         }
     };
 
+    const handlerChangeOrderNumber = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = e.target.value;
+        setOrderList((prevState) => ({
+            ...prevState,
+            orderNumber: value,
+        }));
+    };
+
     const checkFormValidation = () => {
         let isValidation: boolean = true;
         Object.keys(itemForm).map((el) => {
-            if (!itemForm[el].trim()) {
+            if (!itemForm[el].trim() && el !== "доп.информация:") {
                 setErrorForm((prevState) => ({
                     ...prevState,
                     [el]: "заполните поле",
@@ -80,63 +104,132 @@ export const RegistrationPage: React.FC = () => {
 
     const handlerAddItemForm = () => {
         if (!checkFormValidation()) return;
-        setItemsList((prevState) => ({
+        setOrderList((prevState) => ({
             ...prevState,
-            [nanoid()]: itemForm,
+            list: {
+                ...prevState.list,
+                [nanoid()]: itemForm,
+            },
         }));
         setItemForm(getInitialForm());
     };
 
+    const handlerEditItem = (el: string) => {
+        setItemForm(orderList.list[el]);
+        const newOrderList = { ...orderList };
+        delete newOrderList.list[el];
+        setOrderList(newOrderList);
+    };
+
+    const handlerCopyItem = (el: string) => {
+        setItemForm(orderList.list[el]);
+    };
+
+    const handlerDeleteItem = (el: string) => {
+        const newOrderList = { ...orderList };
+        delete newOrderList.list[el];
+        setOrderList(newOrderList);
+    };
+
     return (
-        <div>
-            <p>Формирование новой заявки</p>
-            <div>номер заявки:</div>
-            <Input size="large" style={{ width: 300 }} />
-            <p>Добавление груза:</p>
-            <div className={scss.registrationForm}>
+        <div className={scss.main}>
+            <div className={scss.title}>
+                <p>Формирование новой заявки</p>
+                <div className={scss.numberOrder}>номер заявки:</div>
+                <Input
+                    size="large"
+                    style={{ width: 300 }}
+                    value={orderList.orderNumber}
+                    onChange={handlerChangeOrderNumber}
+                />
+            </div>
+            <div className={scss.sectionForm}>
                 <div className={scss.inputForm}>
-                    {Object.keys(itemForm).map((el) => (
-                        <div className={scss.itemForm} key={el}>
-                            <div>{el}</div>
-                            <Input
-                                size="large"
-                                style={{ width: 300 }}
-                                name={el}
-                                value={itemForm[el]}
-                                onChange={handlerChange}
-                            />
-                            <div className={scss.errorMessage}>
-                                {errorForm[el]}
+                    <div className={scss.subSectionForm}>
+                        {Object.keys(itemForm).map((el) => (
+                            <div className={scss.itemForm} key={el}>
+                                <div>{el}</div>
+                                <Input
+                                    size="large"
+                                    style={{ width: 400 }}
+                                    name={el}
+                                    value={itemForm[el]}
+                                    onChange={handlerChange}
+                                />
+                                <div className={scss.errorMessage}>
+                                    {errorForm[el]}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                    <Button size="large" onClick={handlerAddItemForm}>
-                        добавить
-                    </Button>
+                        ))}
+                    </div>
                 </div>
-                <ol className={scss.outputForm}>
-                    {Object.keys(itemsList).map((el) => (
-                        <li key={el}>
-                            <span>
-                                {itemsList[el]["название компании:"]} -{" "}
-                            </span>
-                            <span>
-                                авианакладная №{itemsList[el]["номер AWB:"]} -{" "}
-                            </span>
-                            <span>
-                                {itemsList[el]["количество мест:"]} мест /{" "}
-                            </span>
-                            <span>{itemsList[el]["вес брутто:"]} кг,</span>
-                            <div>
-                                Таможня назначения - ПТО:{" "}
-                                {itemsList[el]["код таможни:"]} /{" "}
-                                {getCustomsByCode(
-                                    itemsList[el]["код таможни:"]
-                                )}
-                            </div>
-                        </li>
-                    ))}
-                </ol>
+                <div className={scss.outputForm}>
+                    <div className={scss.subSectionForm}>
+                        <ol>
+                            {Object.keys(orderList.list).map((el) => (
+                                <li key={el}>
+                                    <span>
+                                        {
+                                            orderList.list[el][
+                                                "название компании:"
+                                            ]
+                                        }{" "}
+                                        -{" "}
+                                    </span>
+                                    <span>
+                                        авианакладная №
+                                        {orderList.list[el]["номер AWB:"]} -{" "}
+                                    </span>
+                                    <span>
+                                        {orderList.list[el]["количество мест:"]}{" "}
+                                        мест /{" "}
+                                    </span>
+                                    <span>
+                                        {orderList.list[el]["вес брутто:"]} кг,
+                                    </span>
+                                    <div>
+                                        Таможня назначения:{" "}
+                                        {getCustomsByCode(
+                                            orderList.list[el]["код таможни:"]
+                                        )}{" "}
+                                        / {orderList.list[el]["код таможни:"]}
+                                    </div>
+                                    <div>
+                                        {orderList.list[el]["доп.информация:"]}
+                                    </div>
+                                    <div className={scss.itemButtons}>
+                                        <div
+                                            className={scss.button}
+                                            onClick={() => handlerEditItem(el)}
+                                        >
+                                            <EditTwoTone />
+                                        </div>
+                                        <div
+                                            className={scss.button}
+                                            onClick={() => handlerCopyItem(el)}
+                                        >
+                                            <CopyTwoTone twoToneColor="#52c41a" />
+                                        </div>
+                                        <div
+                                            className={scss.button}
+                                            onClick={() =>
+                                                handlerDeleteItem(el)
+                                            }
+                                        >
+                                            <DeleteTwoTone twoToneColor="#eb2f96" />
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div className={scss.sectionButtons}>
+                <Button size="large" onClick={handlerAddItemForm}>
+                    добавить
+                </Button>
+                <Button size="large">распечатать</Button>
             </div>
         </div>
     );
