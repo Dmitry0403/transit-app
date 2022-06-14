@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import scss from "./styles.module.scss";
-import { Content } from "../../components/Content";
+import { PrintContent } from "../../components/PrintContent";
+import { LINKS } from "../../common/routes";
 
 export const PrintPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
         window.print();
-        navigate(-1);
+        navigate(LINKS.home);
     }, []);
 
     return (
@@ -21,8 +22,8 @@ export const PrintPage: React.FC = () => {
                     <span>“АЭРОСТАР”</span>
                 </div>
             </div>
-            <div className={scss.container}>
-                <Content />
+            <div className={scss.printContent}>
+                <PrintContent />
             </div>
             <div className={scss.footer}>
                 <span>

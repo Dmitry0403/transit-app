@@ -1,14 +1,14 @@
 import React from "react";
 import scss from "./styles.module.scss";
-import { ItemContent } from "../ItemContent";
+import { CurrentOrder } from "../CurrentOrder";
 import { format } from "date-fns";
 import ruLocale from "date-fns/locale/ru";
+import { useOrder } from "../../common/helper";
 
-interface IProps {}
-
-export const Content: React.FC<IProps> = () => {
+export const PrintContent: React.FC = () => {
+    const { currentOrder } = useOrder();
     const date = format(new Date(), "dd MMMM yyy", { locale: ruLocale });
-    const orderNumber = "01/06-Д";
+    const orderNumber = currentOrder.orderNumber;
 
     return (
         <div className={scss.content}>
@@ -27,8 +27,8 @@ export const Content: React.FC<IProps> = () => {
                 осуществить оформление транзитных деклараций для грузов,
                 поступивших в аэропорт Шереметьево в адрес:
             </div>
-            <div className={scss.ordersList}>
-                <ItemContent />
+            <div className={scss.currentOrder}>
+                <CurrentOrder />
             </div>
         </div>
     );

@@ -1,3 +1,34 @@
+import { useEffect, useState } from "react";
+
+export interface IItemForm {
+    [key: string]: string;
+}
+
+export interface IOrder {
+    orderNumber: string;
+    list: {
+        [idItemOrder: string]: IItemForm;
+    };
+}
+
+export const useOrder = () => {
+    const getInitialCurrentOrder = () => {
+        if (localStorage.getItem("currentOrder")) {
+            return JSON.parse(localStorage.getItem("currentOrder") as string);
+        } else return { orderNumber: "", list: {} };
+    };
+
+    const [currentOrder, setCurrentOrder] = useState<IOrder>(
+        getInitialCurrentOrder()
+    );
+
+    useEffect(() => {
+        localStorage.setItem("currentOrder", JSON.stringify(currentOrder));
+    }, [currentOrder]);
+
+    return { currentOrder, setCurrentOrder };
+};
+
 export const getCustomsByCode = (code: string) => {
     switch (code) {
         case "06536":

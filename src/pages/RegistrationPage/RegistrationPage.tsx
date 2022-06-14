@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, SetStateAction } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { Button, Input } from "antd";
@@ -6,17 +6,8 @@ import { nanoid } from "nanoid";
 import { Link } from "react-router-dom";
 import { getCustomsByCode } from "../../common/helper";
 import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
-
-interface IItemForm {
-    [key: string]: string;
-}
-
-interface IOrder {
-    orderNumber: string;
-    list: {
-        [idItemOrder: string]: IItemForm;
-    };
-}
+import type { IItemForm } from "../../common/helper";
+import { useOrder } from "../../common/helper";
 
 export const RegistrationPage: React.FC = () => {
     const namesForm = [
@@ -38,19 +29,9 @@ export const RegistrationPage: React.FC = () => {
         );
     };
 
-    const getInitialOrderList = () => {
-        if (localStorage.getItem("currentOrder")) {
-            return JSON.parse(localStorage.getItem("currentOrder") as string);
-        } else return { orderNumber: "", list: {} };
-    };
-
     const [itemForm, setItemForm] = useState<IItemForm>(getInitialForm());
     const [errorForm, setErrorForm] = useState<IItemForm>(getInitialForm());
-    const [orderList, setOrderList] = useState<IOrder>(getInitialOrderList());
-
-    useEffect(() => {
-        localStorage.setItem("currentOrder", JSON.stringify(orderList));
-    }, [orderList]);
+    const { currentOrder, setCurrentOrder } = useOrder();
 
     const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.name;
@@ -71,7 +52,7 @@ export const RegistrationPage: React.FC = () => {
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
         const value = e.target.value;
-        setOrderList((prevState) => ({
+        setCurrentOrder((prevState) => ({
             ...prevState,
             orderNumber: value,
         }));
@@ -104,7 +85,7 @@ export const RegistrationPage: React.FC = () => {
 
     const handlerAddItemForm = () => {
         if (!checkFormValidation()) return;
-        setOrderList((prevState) => ({
+        setCurrentOrder((prevState) => ({
             ...prevState,
             list: {
                 ...prevState.list,
@@ -115,20 +96,20 @@ export const RegistrationPage: React.FC = () => {
     };
 
     const handlerEditItem = (el: string) => {
-        setItemForm(orderList.list[el]);
-        const newOrderList = { ...orderList };
-        delete newOrderList.list[el];
-        setOrderList(newOrderList);
+        setItemForm(currentOrder.list[el]);
+        const newOrder = { ...currentOrder };
+        delete newOrder.list[el];
+        setCurrentOrder(newOrder);
     };
 
     const handlerCopyItem = (el: string) => {
-        setItemForm(orderList.list[el]);
+        setItemForm(currentOrder.list[el]);
     };
 
     const handlerDeleteItem = (el: string) => {
-        const newOrderList = { ...orderList };
-        delete newOrderList.list[el];
-        setOrderList(newOrderList);
+        const newOrder = { ...currentOrder };
+        delete newOrder.list[el];
+        setCurrentOrder(newOrder);
     };
 
     return (
@@ -139,7 +120,7 @@ export const RegistrationPage: React.FC = () => {
                 <Input
                     size="large"
                     style={{ width: 300 }}
-                    value={orderList.orderNumber}
+                    value={currentOrder.orderNumber}
                     onChange={handlerChangeOrderNumber}
                 />
             </div>
@@ -166,11 +147,11 @@ export const RegistrationPage: React.FC = () => {
                 <div className={scss.outputForm}>
                     <div className={scss.subSectionForm}>
                         <ol>
-                            {Object.keys(orderList.list).map((el) => (
+                            {Object.keys(currentOrder.list).map((el) => (
                                 <li key={el}>
                                     <span>
                                         {
-                                            orderList.list[el][
+                                            currentOrder.list[el][
                                                 "название компании:"
                                             ]
                                         }{" "}
@@ -178,24 +159,36 @@ export const RegistrationPage: React.FC = () => {
                                     </span>
                                     <span>
                                         авианакладная №
-                                        {orderList.list[el]["номер AWB:"]} -{" "}
+                                        {currentOrder.list[el]["номер AWB:"]} -{" "}
                                     </span>
                                     <span>
-                                        {orderList.list[el]["количество мест:"]}{" "}
+                                        {
+                                            currentOrder.list[el][
+                                                "количество мест:"
+                                            ]
+                                        }{" "}
                                         мест /{" "}
                                     </span>
                                     <span>
-                                        {orderList.list[el]["вес брутто:"]} кг,
+                                        {currentOrder.list[el]["вес брутто:"]}{" "}
+                                        кг,
                                     </span>
                                     <div>
                                         Таможня назначения:{" "}
                                         {getCustomsByCode(
-                                            orderList.list[el]["код таможни:"]
+                                            currentOrder.list[el][
+                                                "код таможни:"
+                                            ]
                                         )}{" "}
-                                        / {orderList.list[el]["код таможни:"]}
+                                        /{" "}
+                                        {currentOrder.list[el]["код таможни:"]}
                                     </div>
                                     <div>
-                                        {orderList.list[el]["доп.информация:"]}
+                                        {
+                                            currentOrder.list[el][
+                                                "доп.информация:"
+                                            ]
+                                        }
                                     </div>
                                     <div className={scss.itemButtons}>
                                         <div
@@ -229,7 +222,9 @@ export const RegistrationPage: React.FC = () => {
                 <Button size="large" onClick={handlerAddItemForm}>
                     добавить
                 </Button>
-                <Button size="large">распечатать</Button>
+                <Link to={LINKS.print}>
+                    <Button size="large">распечатать</Button>
+                </Link>
             </div>
         </div>
     );
