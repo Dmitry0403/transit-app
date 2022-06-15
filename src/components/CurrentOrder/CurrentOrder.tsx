@@ -8,7 +8,7 @@ export const CurrentOrder: React.FC = () => {
     return (
         <ol>
             {Object.keys(currentOrder.list).map((el) => (
-                <li key={el}>
+                <li className={scss.itemList} key={el}>
                     <span>
                         {currentOrder.list[el]["название компании:"]} -{" "}
                     </span>

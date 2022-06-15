@@ -5,7 +5,11 @@ export interface IItemForm {
 }
 
 export interface IOrder {
-    orderNumber: string;
+    title: {
+        "номер заявки:": string;
+        "номер автомобиля:": string;
+        "ФИО водителя": string;
+    };
     list: {
         [idItemOrder: string]: IItemForm;
     };
@@ -15,7 +19,15 @@ export const useOrder = () => {
     const getInitialCurrentOrder = () => {
         if (localStorage.getItem("currentOrder")) {
             return JSON.parse(localStorage.getItem("currentOrder") as string);
-        } else return { orderNumber: "", list: {} };
+        } else
+            return {
+                title: {
+                    "номер заявки:": "",
+                    "номер автомобиля:": "",
+                    "ФИО водителя:": "",
+                },
+                list: {},
+            };
     };
 
     const [currentOrder, setCurrentOrder] = useState<IOrder>(

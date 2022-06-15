@@ -8,7 +8,7 @@ import { useOrder } from "../../common/helper";
 export const PrintContent: React.FC = () => {
     const { currentOrder } = useOrder();
     const date = format(new Date(), "dd MMMM yyy", { locale: ruLocale });
-    const orderNumber = currentOrder.orderNumber;
+    const orderNumber = currentOrder.title["номер заявки:"];
 
     return (
         <div className={scss.content}>
@@ -29,6 +29,17 @@ export const PrintContent: React.FC = () => {
             </div>
             <div className={scss.currentOrder}>
                 <CurrentOrder />
+            </div>
+            <div className={scss.paragraph}>
+                Номер автомобиля: {currentOrder.title["номер автомобиля:"]}.{" "}
+                {currentOrder.title["ФИО водителя"]}
+            </div>
+            <div className={scss.paragraph}>
+                Оплату выполненных работ гарантируем.
+            </div>
+            <div className={scss.signature}>
+                <div>менеджер</div>
+                <div>Косенко Дмитрий</div>
             </div>
         </div>
     );

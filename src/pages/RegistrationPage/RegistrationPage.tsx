@@ -1,15 +1,23 @@
-import React, { useEffect, useState, SetStateAction } from "react";
+import React, { useState } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { Button, Input } from "antd";
 import { nanoid } from "nanoid";
-import { Link } from "react-router-dom";
 import { getCustomsByCode } from "../../common/helper";
 import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
 import type { IItemForm } from "../../common/helper";
 import { useOrder } from "../../common/helper";
+import { useNavigate } from "react-router-dom";
+
+interface IErrorTitle {
+    "номер заявки:": string;
+    "номер автомобиля:": string;
+    "ФИО водителя": string;
+}
 
 export const RegistrationPage: React.FC = () => {
+    const navigate = useNavigate();
+
     const namesForm = [
         "название компании:",
         "номер AWB:",
@@ -31,6 +39,11 @@ export const RegistrationPage: React.FC = () => {
 
     const [itemForm, setItemForm] = useState<IItemForm>(getInitialForm());
     const [errorForm, setErrorForm] = useState<IItemForm>(getInitialForm());
+    const [errorTitle, setErrorTitle] = useState<IErrorTitle>({
+        "номер заявки:": "",
+        "номер автомобиля:": "",
+        "ФИО водителя": "",
+    });
     const { currentOrder, setCurrentOrder } = useOrder();
 
     const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,14 +61,22 @@ export const RegistrationPage: React.FC = () => {
         }
     };
 
-    const handlerChangeOrderNumber = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handlerChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.name;
         const value = e.target.value;
         setCurrentOrder((prevState) => ({
             ...prevState,
-            orderNumber: value,
+            title: {
+                ...prevState.title,
+                [key]: value,
+            },
         }));
+        if (errorTitle[key as keyof typeof currentOrder.title]) {
+            setErrorTitle((prevState) => ({
+                ...prevState,
+                [key]: "",
+            }));
+        }
     };
 
     const checkFormValidation = () => {
@@ -64,7 +85,7 @@ export const RegistrationPage: React.FC = () => {
             if (!itemForm[el].trim() && el !== "доп.информация:") {
                 setErrorForm((prevState) => ({
                     ...prevState,
-                    [el]: "заполните поле",
+                    [el]: "обязательное поле",
                 }));
                 isValidation = false;
             }
@@ -80,6 +101,24 @@ export const RegistrationPage: React.FC = () => {
             }));
             isValidation = false;
         }
+        return isValidation;
+    };
+
+    const checkTitleValidation = () => {
+        let isValidation: boolean = true;
+        Object.keys(currentOrder.title).map((el) => {
+            if (
+                !currentOrder.title[
+                    el as keyof typeof currentOrder.title
+                ].trim()
+            ) {
+                setErrorTitle((prevState) => ({
+                    ...prevState,
+                    [el]: "обязательное поле",
+                }));
+                isValidation = false;
+            }
+        });
         return isValidation;
     };
 
@@ -112,17 +151,36 @@ export const RegistrationPage: React.FC = () => {
         setCurrentOrder(newOrder);
     };
 
+    const handlerPrintOrder = () => {
+        if (!checkTitleValidation()) return;
+        navigate(LINKS.print);
+    };
+
     return (
         <div className={scss.main}>
             <div className={scss.title}>
                 <p>Формирование новой заявки</p>
-                <div className={scss.numberOrder}>номер заявки:</div>
-                <Input
-                    size="large"
-                    style={{ width: 300 }}
-                    value={currentOrder.orderNumber}
-                    onChange={handlerChangeOrderNumber}
-                />
+                <div className={scss.titleForm}>
+                    {Object.keys(currentOrder.title).map((el) => (
+                        <div className={scss.itemForm} key={el}>
+                            <div>{el}</div>
+                            <Input
+                                size="large"
+                                style={{ width: 300 }}
+                                name={el}
+                                value={
+                                    currentOrder.title[
+                                        el as keyof typeof currentOrder.title
+                                    ]
+                                }
+                                onChange={handlerChangeTitle}
+                            />
+                            <div className={scss.errorMessage}>
+                                {errorTitle[el as keyof typeof errorTitle]}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className={scss.sectionForm}>
                 <div className={scss.inputForm}>
@@ -222,9 +280,9 @@ export const RegistrationPage: React.FC = () => {
                 <Button size="large" onClick={handlerAddItemForm}>
                     добавить
                 </Button>
-                <Link to={LINKS.print}>
-                    <Button size="large">распечатать</Button>
-                </Link>
+                <Button size="large" onClick={handlerPrintOrder}>
+                    распечатать
+                </Button>
             </div>
         </div>
     );
