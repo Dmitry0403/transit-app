@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { Button, Input } from "antd";
@@ -6,18 +6,19 @@ import { nanoid } from "nanoid";
 import { getCustomsByCode } from "../../common/helper";
 import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
 import type { IItemForm } from "../../common/helper";
-import { useOrder } from "../../common/helper";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { orderSelector, orderActions } from "../../store/orderSlice";
 
 interface IErrorTitle {
     "номер заявки:": string;
     "номер автомобиля:": string;
-    "ФИО водителя": string;
+    "ФИО водителя:": string;
 }
 
 export const RegistrationPage: React.FC = () => {
     const navigate = useNavigate();
-
+    const dispatch = useAppDispatch();
     const namesForm = [
         "название компании:",
         "номер AWB:",
@@ -42,9 +43,14 @@ export const RegistrationPage: React.FC = () => {
     const [errorTitle, setErrorTitle] = useState<IErrorTitle>({
         "номер заявки:": "",
         "номер автомобиля:": "",
-        "ФИО водителя": "",
+        "ФИО водителя:": "",
     });
-    const { currentOrder, setCurrentOrder } = useOrder();
+
+    const currentOrder = useAppSelector(orderSelector);
+
+    useEffect(() => {
+        localStorage.setItem("currentOrder", JSON.stringify(currentOrder));
+    }, [currentOrder]);
 
     const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.name;
@@ -64,13 +70,7 @@ export const RegistrationPage: React.FC = () => {
     const handlerChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.name;
         const value = e.target.value;
-        setCurrentOrder((prevState) => ({
-            ...prevState,
-            title: {
-                ...prevState.title,
-                [key]: value,
-            },
-        }));
+        dispatch(orderActions.changeTitleOrder({ key, value }));
         if (errorTitle[key as keyof typeof currentOrder.title]) {
             setErrorTitle((prevState) => ({
                 ...prevState,
@@ -124,31 +124,28 @@ export const RegistrationPage: React.FC = () => {
 
     const handlerAddItemForm = () => {
         if (!checkFormValidation()) return;
-        setCurrentOrder((prevState) => ({
-            ...prevState,
-            list: {
-                ...prevState.list,
-                [nanoid()]: itemForm,
-            },
-        }));
+        const newListOrder = { ...currentOrder.list, [nanoid()]: itemForm };
+        dispatch(orderActions.changeOrder(newListOrder));
         setItemForm(getInitialForm());
     };
 
     const handlerEditItem = (el: string) => {
-        setItemForm(currentOrder.list[el]);
-        const newOrder = { ...currentOrder };
-        delete newOrder.list[el];
-        setCurrentOrder(newOrder);
+        setItemForm(currentOrder.list[el as keyof typeof currentOrder.list]);
+        const newListOrder = { ...currentOrder.list };
+        delete newListOrder[el as keyof typeof currentOrder.list];
+        dispatch(orderActions.changeOrder(newListOrder));
+        setErrorForm(getInitialForm());
     };
 
     const handlerCopyItem = (el: string) => {
-        setItemForm(currentOrder.list[el]);
+        setItemForm(currentOrder.list[el as keyof typeof currentOrder.list]);
+        setErrorForm(getInitialForm());
     };
 
     const handlerDeleteItem = (el: string) => {
-        const newOrder = { ...currentOrder };
-        delete newOrder.list[el];
-        setCurrentOrder(newOrder);
+        const newListOrder = { ...currentOrder.list };
+        delete newListOrder[el as keyof typeof currentOrder.list];
+        dispatch(orderActions.changeOrder(newListOrder));
     };
 
     const handlerPrintOrder = () => {
@@ -209,43 +206,59 @@ export const RegistrationPage: React.FC = () => {
                                 <li key={el}>
                                     <span>
                                         {
-                                            currentOrder.list[el][
-                                                "название компании:"
-                                            ]
+                                            currentOrder.list[
+                                                el as keyof typeof currentOrder.list
+                                            ]["название компании:"]
                                         }{" "}
                                         -{" "}
                                     </span>
                                     <span>
                                         авианакладная №
-                                        {currentOrder.list[el]["номер AWB:"]} -{" "}
-                                    </span>
-                                    <span>
                                         {
-                                            currentOrder.list[el][
-                                                "количество мест:"
-                                            ]
+                                            currentOrder.list[
+                                                el as keyof typeof currentOrder.list
+                                            ]["номер AWB:"]
                                         }{" "}
-                                        мест /{" "}
+                                        -{" "}
                                     </span>
-                                    <span>
-                                        {currentOrder.list[el]["вес брутто:"]}{" "}
-                                        кг,
+                                    <span className={scss.goodsData}>
+                                        <span>
+                                            {
+                                                currentOrder.list[
+                                                    el as keyof typeof currentOrder.list
+                                                ]["количество мест:"]
+                                            }{" "}
+                                            мест /{" "}
+                                        </span>
+                                        <span>
+                                            {
+                                                currentOrder.list[
+                                                    el as keyof typeof currentOrder.list
+                                                ]["вес брутто:"]
+                                            }{" "}
+                                            кг,
+                                        </span>
                                     </span>
+
                                     <div>
                                         Таможня назначения:{" "}
                                         {getCustomsByCode(
-                                            currentOrder.list[el][
-                                                "код таможни:"
-                                            ]
+                                            currentOrder.list[
+                                                el as keyof typeof currentOrder.list
+                                            ]["код таможни:"]
                                         )}{" "}
                                         /{" "}
-                                        {currentOrder.list[el]["код таможни:"]}
+                                        {
+                                            currentOrder.list[
+                                                el as keyof typeof currentOrder.list
+                                            ]["код таможни:"]
+                                        }
                                     </div>
                                     <div>
                                         {
-                                            currentOrder.list[el][
-                                                "доп.информация:"
-                                            ]
+                                            currentOrder.list[
+                                                el as keyof typeof currentOrder.list
+                                            ]["доп.информация:"]
                                         }
                                     </div>
                                     <div className={scss.itemButtons}>

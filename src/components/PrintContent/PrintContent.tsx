@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import scss from "./styles.module.scss";
 import { CurrentOrder } from "../CurrentOrder";
-import { format } from "date-fns";
-import ruLocale from "date-fns/locale/ru";
-import { useOrder } from "../../common/helper";
+import { useAppSelector } from "../../store/hooks";
+import { orderSelector } from "../../store/orderSlice";
 
 export const PrintContent: React.FC = () => {
-    const { currentOrder } = useOrder();
-    const date = format(new Date(), "dd MMMM yyy", { locale: ruLocale });
+    const currentOrder = useAppSelector(orderSelector);
     const orderNumber = currentOrder.title["номер заявки:"];
 
     return (
@@ -20,10 +18,10 @@ export const PrintContent: React.FC = () => {
                 </div>
             </div>
             <p className={scss.order}>
-                ЗАЯВКА №{orderNumber} от {date}г.
+                ЗАЯВКА №{orderNumber} от {currentOrder.date}г.
             </p>
             <div className={scss.preamble}>
-                На основании договора № 0717-02 от 01/12/2021г. просим Вас
+                На основании договора № 0046-02/04 от 29/04/2022г. просим Вас
                 осуществить оформление транзитных деклараций для грузов,
                 поступивших в аэропорт Шереметьево в адрес:
             </div>
@@ -32,7 +30,7 @@ export const PrintContent: React.FC = () => {
             </div>
             <div className={scss.paragraph}>
                 Номер автомобиля: {currentOrder.title["номер автомобиля:"]}.{" "}
-                {currentOrder.title["ФИО водителя"]}
+                {currentOrder.title["ФИО водителя:"]}
             </div>
             <div className={scss.paragraph}>
                 Оплату выполненных работ гарантируем.

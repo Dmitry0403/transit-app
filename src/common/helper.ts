@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import ruLocale from "date-fns/locale/ru";
 
 export interface IItemForm {
     [key: string]: string;
@@ -8,17 +10,24 @@ export interface IOrder {
     title: {
         "номер заявки:": string;
         "номер автомобиля:": string;
-        "ФИО водителя": string;
+        "ФИО водителя:": string;
     };
+    date: string;
     list: {
         [idItemOrder: string]: IItemForm;
     };
 }
 
+export interface IOrdersList {
+    [idOrder: string]: IOrder;
+}
+
 export const useOrder = () => {
     const getInitialCurrentOrder = () => {
         if (localStorage.getItem("currentOrder")) {
-            return JSON.parse(localStorage.getItem("currentOrder") as string);
+            return JSON.parse(
+                localStorage.getItem("currentOrder") as string
+            ) as IOrder;
         } else
             return {
                 title: {
@@ -26,6 +35,7 @@ export const useOrder = () => {
                     "номер автомобиля:": "",
                     "ФИО водителя:": "",
                 },
+                date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
                 list: {},
             };
     };
@@ -39,6 +49,24 @@ export const useOrder = () => {
     }, [currentOrder]);
 
     return { currentOrder, setCurrentOrder };
+};
+
+export const useOrdersList = () => {
+    const getOrdersListFromStorage = () => {
+        if (localStorage.getItem("ordersList")) {
+            return JSON.parse(localStorage.getItem("ordersList") as string);
+        } else return {};
+    };
+
+    const [ordersList, setOrdersList] = useState<IOrdersList>(
+        getOrdersListFromStorage()
+    );
+
+    useEffect(() => {
+        localStorage.setItem("ordersList", JSON.stringify(ordersList));
+    }, [ordersList]);
+
+    return { ordersList, setOrdersList };
 };
 
 export const getCustomsByCode = (code: string) => {
