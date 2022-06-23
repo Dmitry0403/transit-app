@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
-import { useOrder, useOrdersList } from "../../common/helper";
-import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { orderSelector, orderActions } from "../../store/orderSlice";
+import { ordersListSelector } from "../../store/ordersListSlice";
 
 export const OrdersList: React.FC = () => {
     const navigate = useNavigate();
-    const { ordersList } = useOrdersList();
-    const { setCurrentOrder } = useOrder();
+    const dispatch = useAppDispatch();
+
+    const ordersList = useAppSelector(ordersListSelector);
 
     const handlerClickOrder = (item: string) => {
-        setCurrentOrder(ordersList[item]);
+        dispatch(orderActions.openOrder(ordersList[item]));
         navigate(LINKS.input);
     };
+
+    useEffect(() => {
+        localStorage.setItem("ordersList", JSON.stringify(ordersList));
+    }, [ordersList]);
 
     return (
         <div className={scss.ordersList}>

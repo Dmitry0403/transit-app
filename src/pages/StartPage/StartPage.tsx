@@ -4,8 +4,14 @@ import { LINKS } from "../../common/routes";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { OrdersList } from "../../components/OrdersList";
+import { useAppDispatch } from "../../store/hooks";
+import { orderActions } from "../../store/orderSlice";
 
 export const StartPage: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const handlerCreateNewOrdrer = () => {
+        dispatch(orderActions.createOrder());
+    };
     return (
         <div className={scss.startPage}>
             <div className={scss.newOrder}>
@@ -15,6 +21,7 @@ export const StartPage: React.FC = () => {
                         size="large"
                         type="dashed"
                         className={scss.buttonNewOrder}
+                        onClick={handlerCreateNewOrdrer}
                     >
                         новая заявка
                     </Button>

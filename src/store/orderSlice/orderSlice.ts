@@ -19,20 +19,6 @@ export interface IOrder {
     };
 }
 
-export interface IOrdersList {
-    [idOrder: string]: IOrder;
-}
-
-const initialState = {
-    title: {
-        "номер заявки:": "",
-        "номер автомобиля:": "",
-        "ФИО водителя:": "",
-    },
-    date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
-    list: {},
-};
-
 const getInitialCurrentOrder = () => {
     if (localStorage.getItem("currentOrder")) {
         return JSON.parse(
@@ -64,6 +50,9 @@ const orderSlice = createSlice({
                 date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
                 list: {},
             });
+        },
+        openOrder: (state, action: PayloadAction<IOrder>) => {
+            return (state = action.payload);
         },
         changeTitleOrder: (
             state,
