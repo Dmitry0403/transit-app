@@ -4,7 +4,11 @@ import { LINKS } from "../../common/routes";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderActions } from "../../store/orderSlice";
-import { ordersListSelector } from "../../store/ordersListSlice";
+import {
+    ordersListAction,
+    ordersListSelector,
+} from "../../store/ordersListSlice";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 export const OrdersList: React.FC = () => {
     const navigate = useNavigate();
@@ -15,6 +19,12 @@ export const OrdersList: React.FC = () => {
     const handlerClickOrder = (key: string) => {
         dispatch(orderActions.openOrder(ordersList[key]));
         navigate(LINKS.input);
+    };
+
+    const handlerDeleteOrder = (key: string) => {
+        const newOrdersList = { ...ordersList };
+        delete newOrdersList[key];
+        dispatch(ordersListAction.changeOrdersList(newOrdersList));
     };
 
     useEffect(() => {
@@ -30,15 +40,32 @@ export const OrdersList: React.FC = () => {
                 <div className={scss.subOrdersList}>
                     <div className={scss.list}>
                         {Object.keys(ordersList).map((item) => (
-                            <div
-                                className={scss.order}
-                                key={item}
-                                onClick={() => handlerClickOrder(item)}
-                            >
-                                <span>
-                                    {ordersList[item].title["номер заявки:"]}
-                                </span>{" "}
-                                от <span>{ordersList[item].date}</span>
+                            <div className={scss.orderContainer}>
+                                <div
+                                    className={scss.order}
+                                    key={item}
+                                    onClick={() => handlerClickOrder(item)}
+                                >
+                                    <span>
+                                        {
+                                            ordersList[item].title[
+                                                "номер заявки:"
+                                            ]
+                                        }
+                                    </span>{" "}
+                                    от <span>{ordersList[item].date}</span>
+                                </div>
+                                <div
+                                    className={scss.deleteButton}
+                                    onClick={() => handlerDeleteOrder(item)}
+                                >
+                                    <CloseCircleOutlined
+                                        style={{
+                                            fontSize: "25px",
+                                            color: "gray",
+                                        }}
+                                    />
+                                </div>
                             </div>
                         ))}
                     </div>
