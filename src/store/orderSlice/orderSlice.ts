@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { format } from "date-fns";
 import ruLocale from "date-fns/locale/ru";
+import { nanoid } from "nanoid";
 
 export interface IItemForm {
     [key: string]: string;
 }
 
 export interface IOrder {
+    id: string;
     title: {
         "номер заявки:": string;
         "номер автомобиля:": string;
@@ -26,6 +28,7 @@ const getInitialCurrentOrder = () => {
         ) as IOrder;
     } else
         return {
+            id: nanoid(),
             title: {
                 "номер заявки:": "",
                 "номер автомобиля:": "",
@@ -42,6 +45,7 @@ const orderSlice = createSlice({
     reducers: {
         createOrder: (state) => {
             return (state = {
+                id: nanoid(),
                 title: {
                     "номер заявки:": "",
                     "номер автомобиля:": "",

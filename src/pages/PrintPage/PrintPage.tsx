@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import scss from "./styles.module.scss";
 import { PrintContent } from "../../components/PrintContent";
 import { LINKS } from "../../common/routes";
-import { nanoid } from "nanoid";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderSelector } from "../../store/orderSlice";
 import {
@@ -16,7 +15,7 @@ export const PrintPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const currentOrder = useAppSelector(orderSelector);
     const ordersList = useAppSelector(ordersListSelector);
-    const newOrdersList = { ...ordersList, [nanoid()]: currentOrder };
+    const newOrdersList = { ...ordersList, [currentOrder.id]: currentOrder };
 
     useEffect(() => {
         window.print();

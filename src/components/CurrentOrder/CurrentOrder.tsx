@@ -11,59 +11,23 @@ export const CurrentOrder: React.FC = () => {
             {Object.keys(currentOrder.list).map((el) => (
                 <li className={scss.itemList} key={el}>
                     <span>
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["название компании:"]
-                        }{" "}
-                        -{" "}
+                        {currentOrder.list[el]["название компании:"]} -{" "}
                     </span>
                     <span>
-                        авианакладная №
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["номер AWB:"]
-                        }{" "}
-                        -{" "}
+                        авианакладная №{currentOrder.list[el]["номер AWB:"]} -{" "}
                     </span>
                     <span>
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["количество мест:"]
-                        }{" "}
-                        мест /{" "}
+                        {currentOrder.list[el]["количество мест:"]} мест /{" "}
                     </span>
-                    <span>
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["вес брутто:"]
-                        }{" "}
-                        кг,
-                    </span>
+                    <span>{currentOrder.list[el]["вес брутто:"]} кг,</span>
                     <div>
                         Таможня назначения:{" "}
                         {getCustomsByCode(
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["код таможни:"]
+                            currentOrder.list[el]["код таможни:"]
                         )}{" "}
-                        /{" "}
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["код таможни:"]
-                        }
+                        / {currentOrder.list[el]["код таможни:"]}
                     </div>
-                    <div>
-                        {
-                            currentOrder.list[
-                                el as keyof typeof currentOrder.list
-                            ]["доп.информация:"]
-                        }
-                    </div>
+                    <div>{currentOrder.list[el]["доп.информация:"]}</div>
                 </li>
             ))}
         </ol>

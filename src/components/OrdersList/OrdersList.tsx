@@ -3,7 +3,7 @@ import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { orderSelector, orderActions } from "../../store/orderSlice";
+import { orderActions } from "../../store/orderSlice";
 import { ordersListSelector } from "../../store/ordersListSlice";
 
 export const OrdersList: React.FC = () => {
@@ -12,8 +12,8 @@ export const OrdersList: React.FC = () => {
 
     const ordersList = useAppSelector(ordersListSelector);
 
-    const handlerClickOrder = (item: string) => {
-        dispatch(orderActions.openOrder(ordersList[item]));
+    const handlerClickOrder = (key: string) => {
+        dispatch(orderActions.openOrder(ordersList[key]));
         navigate(LINKS.input);
     };
 
@@ -36,20 +36,9 @@ export const OrdersList: React.FC = () => {
                                 onClick={() => handlerClickOrder(item)}
                             >
                                 <span>
-                                    {
-                                        ordersList[
-                                            item as keyof typeof ordersList
-                                        ].title["номер заявки:"]
-                                    }
+                                    {ordersList[item].title["номер заявки:"]}
                                 </span>{" "}
-                                от{" "}
-                                <span>
-                                    {
-                                        ordersList[
-                                            item as keyof typeof ordersList
-                                        ].date
-                                    }
-                                </span>
+                                от <span>{ordersList[item].date}</span>
                             </div>
                         ))}
                     </div>

@@ -5,7 +5,7 @@ import { Button, Input } from "antd";
 import { nanoid } from "nanoid";
 import { getCustomsByCode } from "../../common/helper";
 import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
-import type { IItemForm } from "../../common/helper";
+import type { IItemForm } from "../../store/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderSelector, orderActions } from "../../store/orderSlice";
@@ -71,7 +71,7 @@ export const RegistrationPage: React.FC = () => {
         const key = e.target.name;
         const value = e.target.value;
         dispatch(orderActions.changeTitleOrder({ key, value }));
-        if (errorTitle[key as keyof typeof currentOrder.title]) {
+        if (errorTitle[key as keyof typeof errorTitle]) {
             setErrorTitle((prevState) => ({
                 ...prevState,
                 [key]: "",
@@ -130,21 +130,21 @@ export const RegistrationPage: React.FC = () => {
     };
 
     const handlerEditItem = (el: string) => {
-        setItemForm(currentOrder.list[el as keyof typeof currentOrder.list]);
+        setItemForm(currentOrder.list[el]);
         const newListOrder = { ...currentOrder.list };
-        delete newListOrder[el as keyof typeof currentOrder.list];
+        delete newListOrder[el];
         dispatch(orderActions.changeOrder(newListOrder));
         setErrorForm(getInitialForm());
     };
 
     const handlerCopyItem = (el: string) => {
-        setItemForm(currentOrder.list[el as keyof typeof currentOrder.list]);
+        setItemForm(currentOrder.list[el]);
         setErrorForm(getInitialForm());
     };
 
     const handlerDeleteItem = (el: string) => {
         const newListOrder = { ...currentOrder.list };
-        delete newListOrder[el as keyof typeof currentOrder.list];
+        delete newListOrder[el];
         dispatch(orderActions.changeOrder(newListOrder));
     };
 
@@ -206,35 +206,30 @@ export const RegistrationPage: React.FC = () => {
                                 <li key={el}>
                                     <span>
                                         {
-                                            currentOrder.list[
-                                                el as keyof typeof currentOrder.list
-                                            ]["название компании:"]
+                                            currentOrder.list[el][
+                                                "название компании:"
+                                            ]
                                         }{" "}
                                         -{" "}
                                     </span>
                                     <span>
                                         авианакладная №
-                                        {
-                                            currentOrder.list[
-                                                el as keyof typeof currentOrder.list
-                                            ]["номер AWB:"]
-                                        }{" "}
-                                        -{" "}
+                                        {currentOrder.list[el]["номер AWB:"]} -{" "}
                                     </span>
                                     <span className={scss.goodsData}>
                                         <span>
                                             {
-                                                currentOrder.list[
-                                                    el as keyof typeof currentOrder.list
-                                                ]["количество мест:"]
+                                                currentOrder.list[el][
+                                                    "количество мест:"
+                                                ]
                                             }{" "}
                                             мест /{" "}
                                         </span>
                                         <span>
                                             {
-                                                currentOrder.list[
-                                                    el as keyof typeof currentOrder.list
-                                                ]["вес брутто:"]
+                                                currentOrder.list[el][
+                                                    "вес брутто:"
+                                                ]
                                             }{" "}
                                             кг,
                                         </span>
@@ -243,22 +238,18 @@ export const RegistrationPage: React.FC = () => {
                                     <div>
                                         Таможня назначения:{" "}
                                         {getCustomsByCode(
-                                            currentOrder.list[
-                                                el as keyof typeof currentOrder.list
-                                            ]["код таможни:"]
+                                            currentOrder.list[el][
+                                                "код таможни:"
+                                            ]
                                         )}{" "}
                                         /{" "}
-                                        {
-                                            currentOrder.list[
-                                                el as keyof typeof currentOrder.list
-                                            ]["код таможни:"]
-                                        }
+                                        {currentOrder.list[el]["код таможни:"]}
                                     </div>
                                     <div>
                                         {
-                                            currentOrder.list[
-                                                el as keyof typeof currentOrder.list
-                                            ]["доп.информация:"]
+                                            currentOrder.list[el][
+                                                "доп.информация:"
+                                            ]
                                         }
                                     </div>
                                     <div className={scss.itemButtons}>
