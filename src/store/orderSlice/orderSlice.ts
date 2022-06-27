@@ -70,13 +70,19 @@ const orderSlice = createSlice({
                 },
             });
         },
-        changeOrder: (
-            state,
-            action: PayloadAction<{ [key: string]: IItemForm }>
-        ) => {
+        addedItemOrder: (state, action: PayloadAction<IItemForm>) => {
+            const newList = { ...state.list, [nanoid()]: action.payload };
             return (state = {
                 ...state,
-                list: action.payload,
+                list: newList,
+            });
+        },
+        deleteItemOrder: (state, action: PayloadAction<string>) => {
+            const newList = { ...state.list };
+            delete newList[action.payload];
+            return (state = {
+                ...state,
+                list: newList,
             });
         },
     },

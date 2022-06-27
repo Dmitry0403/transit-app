@@ -124,16 +124,13 @@ export const RegistrationPage: React.FC = () => {
 
     const handlerAddItemForm = () => {
         if (!checkFormValidation()) return;
-        const newListOrder = { ...currentOrder.list, [nanoid()]: itemForm };
-        dispatch(orderActions.changeOrder(newListOrder));
+        dispatch(orderActions.addedItemOrder(itemForm));
         setItemForm(getInitialForm());
     };
 
-    const handlerEditItem = (el: string) => {
-        setItemForm(currentOrder.list[el]);
-        const newListOrder = { ...currentOrder.list };
-        delete newListOrder[el];
-        dispatch(orderActions.changeOrder(newListOrder));
+    const handlerEditItem = (id: string) => {
+        setItemForm(currentOrder.list[id]);
+        dispatch(orderActions.deleteItemOrder(id));
         setErrorForm(getInitialForm());
     };
 
@@ -142,10 +139,8 @@ export const RegistrationPage: React.FC = () => {
         setErrorForm(getInitialForm());
     };
 
-    const handlerDeleteItem = (el: string) => {
-        const newListOrder = { ...currentOrder.list };
-        delete newListOrder[el];
-        dispatch(orderActions.changeOrder(newListOrder));
+    const handlerDeleteItem = (id: string) => {
+        dispatch(orderActions.deleteItemOrder(id));
     };
 
     const handlerPrintOrder = () => {

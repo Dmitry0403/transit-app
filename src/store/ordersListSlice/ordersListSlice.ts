@@ -18,11 +18,16 @@ const ordersListSlice = createSlice({
     name: "ordersList",
     initialState: getInitialOrdersList(),
     reducers: {
-        changeOrdersList: (
-            state,
-            action: PayloadAction<{ [idOrder: string]: IOrder }>
-        ) => {
-            return (state = action.payload);
+        addedOrderToList: (state, action: PayloadAction<IOrder>) => {
+            return {
+                ...state,
+                [action.payload.id]: action.payload,
+            };
+        },
+        deleteOrderFromList: (state, action: PayloadAction<string>) => {
+            const newOrdersList = { ...state };
+            delete newOrdersList[action.payload];
+            return newOrdersList;
         },
     },
 });

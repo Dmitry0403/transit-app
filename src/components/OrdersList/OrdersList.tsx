@@ -21,10 +21,8 @@ export const OrdersList: React.FC = () => {
         navigate(LINKS.input);
     };
 
-    const handlerDeleteOrder = (key: string) => {
-        const newOrdersList = { ...ordersList };
-        delete newOrdersList[key];
-        dispatch(ordersListAction.changeOrdersList(newOrdersList));
+    const handlerDeleteOrder = (id: string) => {
+        dispatch(ordersListAction.deleteOrderFromList(id));
     };
 
     useEffect(() => {
