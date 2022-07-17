@@ -38,7 +38,7 @@ export const OrdersList: React.FC = () => {
                 <div className={scss.subOrdersList}>
                     <div className={scss.list}>
                         {Object.keys(ordersList).map((item) => (
-                            <div className={scss.orderContainer}>
+                            <div className={scss.orderContainer} key={item}>
                                 <div
                                     className={scss.order}
                                     key={item}

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import scss from "./styles.module.scss";
 import { PrintContent } from "../../components/PrintContent";
 import { LINKS } from "../../common/routes";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderSelector } from "../../store/orderSlice";
 import { ordersListAction } from "../../store/ordersListSlice";
+import scss from "./styles.module.scss";
 
 export const PrintPage: React.FC = () => {
     const navigate = useNavigate();
@@ -13,15 +13,17 @@ export const PrintPage: React.FC = () => {
     const currentOrder = useAppSelector(orderSelector);
 
     useEffect(() => {
-        window.print();
-        dispatch(ordersListAction.addedOrderToList(currentOrder));
-        navigate(LINKS.home);
+        setTimeout(() => {
+            window.print();
+            dispatch(ordersListAction.addedOrderToList(currentOrder));
+            navigate(LINKS.home);
+        }, 600);
     }, []);
 
     return (
         <div className={scss.wrapperPrintPage}>
             <div className={scss.header}>
-                <div className={scss.icon + " " + scss.ic_icon}></div>
+                <div className={scss.ic_icon}></div>
                 <div className={scss.companyTitle}>
                     <span>ОБЩЕСТВО</span>
                     <span>С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ</span>

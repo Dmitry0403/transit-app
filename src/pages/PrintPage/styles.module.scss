@@ -11,12 +11,9 @@
     justify-content: center;
 }
 
-.icon {
+.ic_icon:before {
     font-size: 100px;
     margin-right: 10px;
-}
-
-.ic_icon:before {
     content: "\e916";
 }
 
@@ -24,14 +21,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px 20px 0px 20px;
+    padding: 5px 20px 18px 20px;
     font-size: 16px;
     font-weight: 600;
     border-bottom: 3px solid black;
+    line-height: 1.2;
 }
 
 .printContent {
     flex-grow: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .footer {
@@ -40,11 +40,12 @@
     align-items: center;
     border-top: 3px solid black;
     font-weight: 600;
+    line-height: 1.2;
 }
 
 @media print {
     .wrapperPrintPage {
-        padding-top: 100px;
+        padding: 100px 0px;
     }
     .header {
         position: fixed;
@@ -57,9 +58,9 @@
         bottom: 0px;
         left: 70px;
     }
-    p {
-        page-break-inside: avoid;
-    }
+    // .printContent {
+    //     break-inside: avoid-page;
+    // }
 
     @page {
         margin: 20px auto;

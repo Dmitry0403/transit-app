@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import scss from "./styles.module.scss";
 import { CurrentOrder } from "../CurrentOrder";
 import { useAppSelector } from "../../store/hooks";

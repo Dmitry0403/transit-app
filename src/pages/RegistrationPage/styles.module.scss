@@ -24,15 +24,14 @@
     justify-content: space-between;
 }
 
-.inputForm,
-.outputForm {
+.subSectionForm {
     position: relative;
     height: 100%;
-    width: 49%;
+    width: 49.5%;
     box-shadow: 0 0 5px rgb(158, 157, 157);
 }
 
-.subSectionForm {
+.form {
     position: absolute;
     top: 0;
     left: 0;
@@ -65,12 +64,22 @@
     }
 }
 
-.sectionButtons {
+.footerButtons {
     display: flex;
-    justify-content: space-around;
     margin-top: 10px;
 }
 
-.goodsData {
+.subFooterButtons {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boxItemsForm {
     white-space: nowrap;
+}
+
+.footerItemButton {
+    margin-right: 50px;
 }
