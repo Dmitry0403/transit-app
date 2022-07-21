@@ -311,7 +311,6 @@ export const RegistrationPage: React.FC = () => {
                                             кг,
                                         </span>
                                     </span>
-
                                     <div>
                                         Таможня назначения:{" "}
                                         {getCustomsByCode(
