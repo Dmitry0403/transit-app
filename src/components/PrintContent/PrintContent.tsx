@@ -23,13 +23,15 @@ export const PrintContent: React.FC = () => {
             <div className={scss.preamble}>
                 На основании договора № 0046-02/04 от 29/04/2022г. просим Вас
                 осуществить оформление транзитных деклараций для грузов,
-                поступивших в аэропорт Шереметьево в адрес:
+                поступивших в аэропорт{" "}
+                {currentOrder.title["аэропорт:"] || "Шереметьево"} в адрес:
             </div>
             <div className={scss.currentOrder}>
                 <CurrentOrder />
             </div>
             <div className={scss.paragraph}>
-                Номер автомобиля: {currentOrder.title["номер автомобиля:"]}.{" "}
+                Номер автомобиля: {currentOrder.title["номер автомобиля:"]}
+                {currentOrder.isTrailer && <span>/ A 1482 E-5</span>}.{" "}
                 {currentOrder.title["ФИО водителя:"]}
             </div>
             <div className={scss.paragraph}>

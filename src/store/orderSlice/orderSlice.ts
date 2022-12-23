@@ -14,7 +14,9 @@ export interface IOrder {
         "номер заявки:": string;
         "номер автомобиля:": string;
         "ФИО водителя:": string;
+        "аэропорт:": string;
     };
+    isTrailer: boolean;
     date: string;
     list: {
         [idItemOrder: string]: IItemForm;
@@ -33,7 +35,9 @@ const getInitialCurrentOrder = () => {
                 "номер заявки:": "",
                 "номер автомобиля:": "",
                 "ФИО водителя:": "",
+                "аэропорт:": "Шереметьево",
             },
+            isTrailer: false,
             date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
             list: {},
         };
@@ -50,7 +54,9 @@ const orderSlice = createSlice({
                     "номер заявки:": "",
                     "номер автомобиля:": "",
                     "ФИО водителя:": "",
+                    "аэропорт:": "Шереметьево",
                 },
+                isTrailer: false,
                 date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
                 list: {},
             });
@@ -68,6 +74,12 @@ const orderSlice = createSlice({
                     ...state.title,
                     [action.payload.key]: action.payload.value,
                 },
+            });
+        },
+        changeCheckBox: (state, action: PayloadAction<boolean>) => {
+            return (state = {
+                ...state,
+                isTrailer: action.payload,
             });
         },
         addedItemOrder: (state, action: PayloadAction<IItemForm>) => {

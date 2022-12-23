@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
-import { Button, Input, Select } from "antd";
-import { nanoid } from "nanoid";
+import { Button, Input, Select, Checkbox } from "antd";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { getCustomsByCode } from "../../common/helper";
 import { DeleteTwoTone, EditTwoTone, CopyTwoTone } from "@ant-design/icons";
 import type { IItemForm } from "../../store/orderSlice";
@@ -53,11 +53,12 @@ export const RegistrationPage: React.FC = () => {
         "Воронецкий Михаил",
         "Латушко Олег",
         "Присенко Александр",
-        "Чирок Владимир",
         "Игнатович Геннадий",
         "Бакунович Александр",
         "Вершенко Юрий",
     ];
+
+    const aeroports = ["Шереметьево", "Внуково"];
 
     const getInitialForm = (): IItemForm => {
         return namesForm.reduce(
@@ -194,10 +195,35 @@ export const RegistrationPage: React.FC = () => {
         navigate(LINKS.print);
     };
 
+    const handlerCkeckBoxChange = (e: CheckboxChangeEvent) => {
+        dispatch(orderActions.changeCheckBox(e.target.checked));
+    };
+
     return (
         <div className={scss.main}>
             <div className={scss.title}>
-                <p>Формирование новой заявки</p>
+                <p>
+                    Формирование новой заявки в аэропорту
+                    <span>
+                        {" "}
+                        <Select
+                            size="large"
+                            defaultValue={
+                                currentOrder.title["аэропорт:"] || "Шереметьево"
+                            }
+                            style={{ width: 200, textAlign: "left" }}
+                            onChange={(value: string) =>
+                                handlerSelectTitle(value, "аэропорт:")
+                            }
+                        >
+                            {aeroports.map((el) => (
+                                <Option key={el} value={el}>
+                                    {el}
+                                </Option>
+                            ))}
+                        </Select>
+                    </span>
+                </p>
                 <div className={scss.titleForm}>
                     <div className={scss.itemForm}>
                         <div>номер заявки:</div>
@@ -232,6 +258,13 @@ export const RegistrationPage: React.FC = () => {
                         </Select>
                         <div className={scss.errorMessage}>
                             {errorTitle["номер автомобиля:"]}
+                        </div>
+                        <div className={scss.checkbox}>
+                            прицеп{" "}
+                            <Checkbox
+                                defaultChecked={currentOrder.isTrailer}
+                                onChange={handlerCkeckBoxChange}
+                            ></Checkbox>
                         </div>
                     </div>
                     <div className={scss.itemForm}>
@@ -293,7 +326,7 @@ export const RegistrationPage: React.FC = () => {
                                         авианакладная №
                                         {currentOrder.list[el]["номер AWB:"]} -{" "}
                                     </span>
-                                    <span className={scss.boxItemsForm}>
+                                    <div className={scss.boxItemsForm}>
                                         <span>
                                             {
                                                 currentOrder.list[el][
@@ -310,7 +343,7 @@ export const RegistrationPage: React.FC = () => {
                                             }{" "}
                                             кг,
                                         </span>
-                                    </span>
+                                    </div>
                                     <div>
                                         Таможня назначения:{" "}
                                         {getCustomsByCode(
