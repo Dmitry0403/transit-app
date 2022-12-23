@@ -1,0 +1,59 @@
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 100%;
+}
+
+.subOrdersList {
+    position: relative;
+    flex-grow: 1;
+}
+
+.title {
+    font-size: 20px;
+}
+
+.list {
+    padding: 10px 25px 10px 25px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%);
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.orderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.order {
+    display: inline-block;
+    flex-grow: 1;
+    border: solid 1px black;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgb(158, 157, 157);
+    padding: 5px 15px 5px 15px;
+    margin-right: 10px;
+    color: black;
+    margin-bottom: 10px;
+    &:hover {
+        box-shadow: 0 0 10px rgb(128, 128, 128);
+        cursor: pointer;
+    }
+}
+
+.data {
+    margin-right: 10px;
+}
+
+.deleteButton {
+    &:hover {
+        cursor: pointer;
+    }
+}

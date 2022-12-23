@@ -1,0 +1,68 @@
+.wrapperPrintPage {
+    display: flex;
+    flex-direction: column;
+    height: 297mm;
+    width: 210mm;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ic_icon:before {
+    font-size: 100px;
+    margin-right: 10px;
+    content: "\e916";
+}
+
+.companyTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 20px 18px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 3px solid black;
+    line-height: 1.2;
+}
+
+.printContent {
+    flex-grow: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 3px solid black;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+@media print {
+    .wrapperPrintPage {
+        padding: 100px 0px;
+    }
+    .header {
+        position: fixed;
+        top: 0px;
+        left: 100px;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0px;
+        left: 70px;
+    }
+    // .printContent {
+    //     break-inside: avoid-page;
+    // }
+
+    @page {
+        margin: 20px auto;
+    }
+}

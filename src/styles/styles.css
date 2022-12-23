@@ -1,4 +1,5 @@
 @import url("./fonts.css");
+@import url("../iconFonts/style.css");
 
 html {
     box-sizing: border-box;
@@ -14,4 +15,5 @@ body {
     font-family: "GoogleSans", Arial, Helvetica, sans-serif;
     font-size: 17px;
     font-weight: 400;
+    background: #fcfcfc;
 }
