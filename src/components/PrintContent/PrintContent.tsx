@@ -3,8 +3,10 @@ import scss from "./styles.module.scss";
 import { CurrentOrder } from "../CurrentOrder";
 import { useAppSelector } from "../../store/hooks";
 import { orderSelector } from "../../store/orderSlice";
+import { signatureSelector } from "../../store/signatureSlice";
 
 export const PrintContent: React.FC = () => {
+    const signature = useAppSelector(signatureSelector);
     const currentOrder = useAppSelector(orderSelector);
     const orderNumber = currentOrder.title["номер заявки:"];
 
@@ -38,8 +40,8 @@ export const PrintContent: React.FC = () => {
                 Оплату выполненных работ гарантируем.
             </div>
             <div className={scss.signature}>
-                <div>менеджер</div>
-                <div>Косенко Дмитрий</div>
+                <div>{signature.position}</div>
+                <div>{signature.fullName}</div>
             </div>
         </div>
     );
