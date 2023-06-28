@@ -4,12 +4,14 @@ import { LINKS } from "../../common/routes";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { OrdersList } from "../../components/OrdersList";
-import { useAppDispatch } from "../../store/hooks";
+import { signatureSelector } from "../../store/signatureSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { orderActions } from "../../store/orderSlice";
 
 export const StartPage: React.FC = () => {
+    const signature = useAppSelector(signatureSelector);
     const dispatch = useAppDispatch();
-    const handlerCreateNewOrdrer = () => {
+    const handlerCreateNewOrder = () => {
         dispatch(orderActions.createOrder());
     };
     return (
@@ -21,7 +23,7 @@ export const StartPage: React.FC = () => {
                         size="large"
                         type="dashed"
                         className={scss.buttonNewOrder}
-                        onClick={handlerCreateNewOrdrer}
+                        onClick={handlerCreateNewOrder}
                     >
                         новая заявка
                     </Button>
@@ -29,6 +31,15 @@ export const StartPage: React.FC = () => {
             </div>
             <div className={scss.ordersList}>
                 <OrdersList />
+            </div>
+            <div className={scss.signature}>
+                <div>{signature.position}</div>
+                <div>{signature.fullName}</div>
+                <Link to={LINKS.signature}>
+                    <Button size="middle" type="dashed">
+                        изменить
+                    </Button>
+                </Link>
             </div>
         </div>
     );
