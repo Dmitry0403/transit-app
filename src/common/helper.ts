@@ -30,6 +30,8 @@ export const getCustomsByCode = (code: string) => {
             return "ПТО Витебск-Белтаможсервис";
         case "07270":
             return "ПТО Орша-Белтаможсервис";
+        case "07271":
+            return "ПТО Бремино-Орша";
         case "06544":
             return "ПТО Белювелирторг";
         case "09146":
