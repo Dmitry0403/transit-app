@@ -40,7 +40,9 @@ export const PrintContent: React.FC = () => {
                 Оплату выполненных работ гарантируем.
             </div>
             <div className={scss.signature}>
-                <div>{signature.position}</div>
+                <div className={scss.signaturePosition}>
+                    {signature.position}
+                </div>
                 <div>{signature.fullName}</div>
             </div>
         </div>
