@@ -55,12 +55,10 @@
 
     .footer {
         position: fixed;
-        bottom: 0px;
-        left: 70px;
+        bottom: -150px;
+        left: 50px;
+        font-size: 16px;
     }
-    // .printContent {
-    //     break-inside: avoid-page;
-    // }
 
     @page {
         margin: 20px auto;
