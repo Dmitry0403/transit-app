@@ -55,7 +55,7 @@ export const RegistrationPage: React.FC = () => {
         "Бакунович Александр",
     ];
 
-    const aeroports = ["Шереметьево", "Внуково", "Домодедово"];
+    const aeroports = ["Шереметьево", "Внуково", "Домодедово", "Жуковский"];
 
     const getInitialForm = (): IItemForm => {
         return namesForm.reduce(
