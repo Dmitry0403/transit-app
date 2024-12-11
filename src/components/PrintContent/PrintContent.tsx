@@ -16,7 +16,7 @@ export const PrintContent: React.FC = () => {
                 <div>
                     <p>Генеральному директору</p>
                     <p>ЗАО «Специальная Транспортная Служба»</p>
-                    <p>Дееву А.Г. </p>
+                    <p>Иванову В.Н. </p>
                 </div>
             </div>
             <p className={scss.order}>
