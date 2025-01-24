@@ -36,7 +36,6 @@ export const RegistrationPage: React.FC = () => {
         "AT 9288-5",
         "AM 2957-5",
         "AM 9118-5",
-        "AK 4733-5",
         "AT 2761-5",
         "AT 2762-5",
         "AP 7963-5",

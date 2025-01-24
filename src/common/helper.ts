@@ -9,9 +9,9 @@ export const getCustomsByCode = (code: string) => {
         case "06611":
             return "ПТО Белкульторг";
         case "06650":
-            return "ПТО Минск-Белтаможсервис-2";
+            return "ПТО Минск-ТЛЦ-2";
         case "06649":
-            return "ПТО Минск-Белтаможсервис-ТЛЦ";
+            return "ПТО Минск-ТЛЦ-1";
         case "06544":
             return "ПТО Белювелирторг";
         case "06641":
@@ -21,7 +21,7 @@ export const getCustomsByCode = (code: string) => {
         case "06544":
             return "ПТО Белювелирторг";
         case "06613":
-            return "ПТО Белаз";
+            return "ПТО Жодино-Логистик";
         case "06608":
             return "ПТО Борисов-авто";
         case "07242":
