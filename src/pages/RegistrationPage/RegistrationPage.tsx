@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderSelector, orderActions } from "../../store/orderSlice";
 import { ordersListAction } from "../../store/ordersListSlice";
+import { saveOrderToRemote } from "../../store/ordersListSlice/ordersListSlice";
 
 interface IErrorTitle {
     "номер заявки:": string;
@@ -75,6 +76,7 @@ export const RegistrationPage: React.FC = () => {
 
     const currentOrder = useAppSelector(orderSelector);
 
+    // Autosave draft locally so unfinished form survives reloads
     useEffect(() => {
         localStorage.setItem("currentOrder", JSON.stringify(currentOrder));
     }, [currentOrder]);
@@ -182,6 +184,7 @@ export const RegistrationPage: React.FC = () => {
 
     const handlerSaveOrder = () => {
         dispatch(ordersListAction.addedOrderToList(currentOrder));
+        dispatch<any>(saveOrderToRemote(currentOrder));
         navigate(LINKS.home);
     };
 
@@ -197,7 +200,7 @@ export const RegistrationPage: React.FC = () => {
     return (
         <div className={scss.main}>
             <div className={scss.title}>
-                <p>
+                <div>
                     Формирование новой заявки в аэропорту
                     <span>
                         {" "}
@@ -218,7 +221,7 @@ export const RegistrationPage: React.FC = () => {
                             ))}
                         </Select>
                     </span>
-                </p>
+                </div>
                 <div className={scss.titleForm}>
                     <div className={scss.itemForm}>
                         <div>номер заявки:</div>

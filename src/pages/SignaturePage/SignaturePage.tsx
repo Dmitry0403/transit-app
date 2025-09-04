@@ -5,10 +5,7 @@ import { Button, Input } from "antd";
 import type { ISignature } from "../../store/signatureSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import {
-    signatureSelector,
-    signatureActions,
-} from "../../store/signatureSlice";
+import { signatureSelector, saveSignature } from "../../store/signatureSlice";
 
 export const SignaturePage: React.FC = () => {
     const navigate = useNavigate();
@@ -53,8 +50,10 @@ export const SignaturePage: React.FC = () => {
 
     const handlerSaveSignature = () => {
         if (checkFormValidation()) {
-            dispatch(signatureActions.changeSignature(itemForm));
-            localStorage.setItem("signature", JSON.stringify(itemForm));
+            dispatch<any>(saveSignature(itemForm));
+            try {
+                localStorage.setItem("signature", JSON.stringify(itemForm));
+            } catch {}
             navigate(LINKS.home);
         }
     };

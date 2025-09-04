@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import scss from "./styles.module.scss";
 import { LINKS } from "../../common/routes";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { orderActions } from "../../store/orderSlice";
 import {
     ordersListAction,
     ordersListSelector,
+    deleteOrderFromRemote,
 } from "../../store/ordersListSlice";
 import { CloseCircleOutlined } from "@ant-design/icons";
 
@@ -23,11 +24,10 @@ export const OrdersList: React.FC = () => {
 
     const handlerDeleteOrder = (id: string) => {
         dispatch(ordersListAction.deleteOrderFromList(id));
+        dispatch<any>(deleteOrderFromRemote(id));
     };
 
-    useEffect(() => {
-        localStorage.setItem("ordersList", JSON.stringify(ordersList));
-    }, [ordersList]);
+    // orders list is synced via Firestore subscription
 
     return (
         <div className={scss.ordersList}>

@@ -24,23 +24,22 @@ export interface IOrder {
 }
 
 const getInitialCurrentOrder = () => {
-    if (localStorage.getItem("currentOrder")) {
-        return JSON.parse(
-            localStorage.getItem("currentOrder") as string
-        ) as IOrder;
-    } else
-        return {
-            id: nanoid(),
-            title: {
-                "номер заявки:": "",
-                "номер автомобиля:": "",
-                "ФИО водителя:": "",
-                "аэропорт:": "Шереметьево",
-            },
-            isTrailer: false,
-            date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
-            list: {},
-        };
+    try {
+        const raw = localStorage.getItem("currentOrder");
+        if (raw) return JSON.parse(raw) as IOrder;
+    } catch {}
+    return {
+        id: nanoid(),
+        title: {
+            "номер заявки:": "",
+            "номер автомобиля:": "",
+            "ФИО водителя:": "",
+            "аэропорт:": "Шереметьево",
+        },
+        isTrailer: false,
+        date: format(new Date(), "dd MMMM yyy", { locale: ruLocale }),
+        list: {},
+    };
 };
 
 const orderSlice = createSlice({

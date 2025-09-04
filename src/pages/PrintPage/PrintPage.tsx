@@ -5,6 +5,7 @@ import { LINKS } from "../../common/routes";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { orderSelector } from "../../store/orderSlice";
 import { ordersListAction } from "../../store/ordersListSlice";
+import { saveOrderToRemote } from "../../store/ordersListSlice/ordersListSlice";
 import scss from "./styles.module.scss";
 
 export const PrintPage: React.FC = () => {
@@ -16,6 +17,7 @@ export const PrintPage: React.FC = () => {
         setTimeout(() => {
             window.print();
             dispatch(ordersListAction.addedOrderToList(currentOrder));
+            dispatch<any>(saveOrderToRemote(currentOrder));
             navigate(LINKS.home);
         }, 600);
     }, []);
